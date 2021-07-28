@@ -11,3 +11,4 @@ jobs:
         with:
           push: true
           tags: grpc-gateway-builder:latest
+          password: ${{ secrets.CR_PAT }}
