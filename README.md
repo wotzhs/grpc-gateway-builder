@@ -1,7 +1,7 @@
 # gRPC Gateway Builder
 
 ```bash
-docker pull ghcr.io/wotzhs/grpc-gateway-builder
+docker pull wotzhs/grpc-gateway-builder
 ```
 
 This repo contains the Dockerfile to build the alpine based builder image for [grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway) to maximise the efficiency of gRPC application compilation.  
