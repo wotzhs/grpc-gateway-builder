@@ -6,8 +6,8 @@ ARG PROTO_BIN_URL=https://github.com/protocolbuffers/protobuf/releases/download/
 ARG GOOGLE_APIS_URL=https://github.com/googleapis/googleapis.git
 
 RUN apk update && apk upgrade && apk add git
-COPY tools.go ~/
-WORKDIR ~/
+COPY tools.go /home
+WORKDIR /home
 RUN go mod init tmpmod && go mod tidy && go install \
 	github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
 	github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
@@ -16,8 +16,11 @@ RUN go mod init tmpmod && go mod tidy && go install \
 
 RUN wget $PROTO_BIN_URL && unzip $PROTO_ZIP_FILE -d protoc && mv protoc/include /usr/local
 RUN git clone $GOOGLE_APIS_URL && mv googleapis/google/* /usr/local/include/google/
+RUN wget https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/v0.4.4/grpc_health_probe-linux-amd64 && \
+	chmod +x grpc_health_probe-linux-amd64
 
 FROM golang:alpine3.13
 COPY --from=base /go/bin /go/bin
 COPY --from=base /usr/local/include /usr/local/include
+COPY --from=base /home/grpc_health_probe-linux-amd64 /go/bin/grpc_health_probe
 RUN apk update && apk upgrade && apk add make git protobuf
