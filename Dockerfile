@@ -4,6 +4,7 @@ ARG PROTO_VERSION=3.17.3
 ARG PROTO_ZIP_FILE=protoc-${PROTO_VERSION}-linux-x86_64.zip
 ARG PROTO_BIN_URL=https://github.com/protocolbuffers/protobuf/releases/download/v${PROTO_VERSION}/${PROTO_ZIP_FILE}
 ARG GOOGLE_APIS_URL=https://github.com/googleapis/googleapis.git
+ARG GRPC_GATEWAY_REPO_URL=https://github.com/grpc-ecosystem/grpc-gateway.git
 
 RUN apk update && apk upgrade && apk add git
 COPY tools.go /home
@@ -16,6 +17,11 @@ RUN go mod init tmpmod && go mod tidy && go install \
 
 RUN wget $PROTO_BIN_URL && unzip $PROTO_ZIP_FILE -d protoc && mv protoc/include /usr/local
 RUN git clone $GOOGLE_APIS_URL && mv googleapis/google/* /usr/local/include/google/
+RUN git clone $GRPC_GATEWAY_REPO_URL && \
+	mkdir -p /usr/local/include/protoc-gen-openapiv2 && \
+	find grpc-gateway/protoc-gen-openapiv2/options/ -type f -not -name '*.proto' -delete && \
+	mv grpc-gateway/protoc-gen-openapiv2/options /usr/local/include/protoc-gen-openapiv2
+
 RUN wget https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/v0.4.4/grpc_health_probe-linux-amd64 && \
 	chmod +x grpc_health_probe-linux-amd64
 
