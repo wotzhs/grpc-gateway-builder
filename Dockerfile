@@ -15,6 +15,8 @@ RUN go mod init tmpmod && go mod tidy && go install \
 	google.golang.org/protobuf/cmd/protoc-gen-go \
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc
 
+RUN go install github.com/golang/mock/mockgen@v1.6.0
+
 RUN wget $PROTO_BIN_URL && unzip $PROTO_ZIP_FILE -d protoc && mv protoc/include /usr/local
 RUN git clone $GOOGLE_APIS_URL && mv googleapis/google/* /usr/local/include/google/
 RUN git clone $GRPC_GATEWAY_REPO_URL && \
