@@ -31,4 +31,4 @@ FROM golang:alpine3.13
 COPY --from=base /go/bin /go/bin
 COPY --from=base /usr/local/include /usr/local/include
 COPY --from=base /home/grpc_health_probe-linux-amd64 /go/bin/grpc_health_probe
-RUN apk update && apk upgrade && apk add make git protobuf
+RUN apk update && apk upgrade && apk add make git protobuf jq
