@@ -9,7 +9,7 @@ ARG GRPC_GATEWAY_REPO_URL=https://github.com/grpc-ecosystem/grpc-gateway.git
 RUN apk update && apk upgrade && apk add git
 COPY tools.go /home
 WORKDIR /home
-RUN go mod init tmpmod && go mod tidy && go install \
+RUN go mod init tmpmod && go mod tidy -go=1.16 && go mod tidy -go=1.17 && go install \
 	github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
 	github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
 	google.golang.org/protobuf/cmd/protoc-gen-go \
